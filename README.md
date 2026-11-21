@@ -1,3 +1,40 @@
-# Glean Integration Study
+# Glean integration study • private wiki baseline
 
-Engineering experiments with private customer services and Glean connectors.
+This milestone measures the source side of a custom Glean indexing connector. Two synthetic wiki pages travel over HTTP and become Glean SDK DocumentDefinition objects. The reference output in `expected/documents.json` uses the SDK's wire aliases and stable ID order. A later transport can be tested against those exact bytes. The example page links are synthetic canonical identifiers independent of the fetch address.
+
+## Run the network experiment
+
+From the repository root on a Linux Docker Engine host with Docker Compose v2.20+ and internet access for the initial image build, run:
+
+```sh
+./test-compose.sh
+```
+
+The base Compose file puts the wiki and connector on disjoint internal bridge networks and publishes no ports. The direct override also attaches the connector to the customer network. The script starts a healthy wiki, runs the direct connector twice, and compares both outputs byte for byte with the reference. It then launches the same image without the override and attempts HTTP reads by service name and container IPv4 address. Testing the address separately catches a reachable source hidden only by DNS. Any HTTP response, malformed source data, unexpected socket error or successful read fails the isolation test. A final direct read checks that the wiki is still serving the expected content. The script removes its project containers and networks on exit.
+
+To print the direct reference run manually:
+
+```sh
+docker compose -f compose.yaml -f compose.direct.yaml build
+docker compose up -d --wait wiki
+docker compose -f compose.yaml -f compose.direct.yaml run --rm -T connector
+docker compose down
+```
+
+## Run the document test without containers
+
+From the repository root, using Python 3.12:
+
+```sh
+python3.12 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -m unittest -v
+```
+
+The test starts the actual wiki on an ephemeral loopback port and invokes the connector CLI in two fresh processes. The reference exercises reversed source order, UTF-8, multiline content and canonical document URLs. The source fixture is in `fixtures/pages.json`. Dependencies are pinned for Python 3.12.
+
+## Scope and attribution
+
+The connector adapts Glean's [non-streaming wiki example](https://github.com/gleanwork/glean-indexing-sdk/blob/ee846524264723549ef24dd32ef4324844268f9e/snippets/non_streaming/complete.py). It uses BaseDataClient, BaseDatasourceConnector.get_data(), transform(), ContentDefinition and DocumentDefinition from glean-indexing-sdk 1.2.2. The upstream MIT license and copyright appear in [licenses/Glean-MIT.txt](licenses/Glean-MIT.txt).
+
+The experiment ends at document serialization. Tenant uploads, identity and ACL synchronization, Thirp Runtime and Thirp Cloud for Platforms are outside this milestone. No tenant credentials are required.

@@ -1,0 +1,22 @@
+[
+  {
+    "body": {
+      "mimeType": "text/plain",
+      "textContent": "Kitchen hours: 08:00–16:00."
+    },
+    "datasource": "studywiki",
+    "id": "cafe",
+    "title": "Café handbook",
+    "viewURL": "https://wiki.example.invalid/pages/cafe"
+  },
+  {
+    "body": {
+      "mimeType": "text/plain",
+      "textContent": "Week A: platform.\nWeek B: operations."
+    },
+    "datasource": "studywiki",
+    "id": "rotation",
+    "title": "On-call rotation",
+    "viewURL": "https://wiki.example.invalid/pages/rotation"
+  }
+]

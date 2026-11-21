@@ -1,0 +1,13 @@
+name: Private wiki baseline
+on:
+  push:
+    branches: [dev/private-wiki-baseline]
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./test-compose.sh
