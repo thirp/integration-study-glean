@@ -1,0 +1,31 @@
+x-runtime: &runtime
+  image: glean-study-runtime:0.16.11
+  platform: linux/amd64
+  build: ./runtime
+services:
+  broker:
+    <<: *runtime
+    networks: [relay, connector]
+    volumes:
+      - ./runtime/broker.conf:/etc/thirp/broker.conf:ro
+      - ${STUDY_KEYS:?}/broker:/run/thirp:ro
+    command: [thirp-broker, --config, /etc/thirp/broker.conf]
+  agent:
+    <<: *runtime
+    networks: [relay, customer]
+    volumes:
+      - ${STUDY_KEYS:?}/agent:/run/thirp:ro
+    command: [thirp-agent, --broker, 'broker:8443', --tls-ca, /run/thirp/broker.crt, --token-file, /run/thirp/token, --service, study/wiki, --target, 'wiki:8080']
+  caller:
+    <<: *runtime
+    networks: [connector]
+    volumes:
+      - ${STUDY_KEYS:?}/caller:/run/thirp:ro
+    command: [thirp-connect, --broker, 'broker:8443', --tls-ca, /run/thirp/broker.crt, --token-file, /run/thirp/token, --service, study/wiki, --listen, '127.0.0.1:18080']
+  reader:
+    build: .
+    network_mode: service:caller
+    command: [python, connector.py, 'http://127.0.0.1:18080']
+networks:
+  relay:
+    internal: true

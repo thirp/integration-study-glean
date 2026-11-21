@@ -40,3 +40,18 @@ The connector adapts Glean's [non-streaming wiki example](https://github.com/gle
 The experiment ends at document serialization. Tenant uploads, identity and ACL synchronization, Thirp Runtime and Thirp Cloud for Platforms are outside this milestone. No tenant credentials are required.
 
 GitHub Actions runs `./test-compose.sh` on a Linux runner for pushes to `dev/private-wiki-baseline`. Open the **Private wiki baseline** run for the tested commit to inspect the observed DNS and IPv4 outcomes.
+
+## Milestone 2 • self-hosted Thirp Runtime
+
+On Linux x86-64 with Docker Compose v2.20+, OpenSSL and internet access for the image build, run:
+
+```sh
+./test-compose.sh
+./test-runtime.sh
+```
+
+The second test starts the private wiki and a self-hosted TLS broker. A customer-side Agent registers `study/wiki` with the broker and forwards authorized streams to `wiki:8080`. The caller exposes the service at `127.0.0.1:18080` in the reader's network namespace. The original Glean connector receives that URL as its only application-level configuration change. Its canonical document URLs remain stable.
+
+Compose creates the networks and starts the processes. The broker enforces its local production-mode policy from `runtime/broker.conf`, with separate per-run registration and connection credentials restricted to the named wiki. The reader has no customer-network attachment. The test reads through Runtime, probes direct DNS and IPv4 access from the same namespace, reads through Runtime again, and compares both results against the baseline. Generated credentials are removed during teardown.
+
+The Runtime image verifies the pinned Linux operator archive against its SHA-256 digest. See the [v0.16.11 release](https://github.com/thirp/runtime/releases/tag/v0.16.11) and [operator configuration](https://github.com/thirp/runtime/blob/v0.16.11/docs/OPERATIONS.md). Thirp Cloud for Platforms is a later experiment in managed authorization and broker operation.
