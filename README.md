@@ -38,3 +38,5 @@ The test starts the actual wiki on an ephemeral loopback port and invokes the co
 The connector adapts Glean's [non-streaming wiki example](https://github.com/gleanwork/glean-indexing-sdk/blob/ee846524264723549ef24dd32ef4324844268f9e/snippets/non_streaming/complete.py). It uses BaseDataClient, BaseDatasourceConnector.get_data(), transform(), ContentDefinition and DocumentDefinition from glean-indexing-sdk 1.2.2. The upstream MIT license and copyright appear in [licenses/Glean-MIT.txt](licenses/Glean-MIT.txt).
 
 The experiment ends at document serialization. Tenant uploads, identity and ACL synchronization, Thirp Runtime and Thirp Cloud for Platforms are outside this milestone. No tenant credentials are required.
+
+GitHub Actions runs `./test-compose.sh` on a Linux runner for pushes to `dev/private-wiki-baseline`. Open the **Private wiki baseline** run for the tested commit to inspect the observed DNS and IPv4 outcomes.
