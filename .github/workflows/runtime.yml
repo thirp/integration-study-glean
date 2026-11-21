@@ -1,0 +1,16 @@
+name: Thirp Runtime wiki relay
+on:
+  push:
+    branches: [dev/runtime-wiki-relay]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  runtime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./test-compose.sh
+      - run: ./test-runtime.sh
