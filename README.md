@@ -61,3 +61,7 @@ The Runtime image verifies the pinned Linux operator archive against its SHA-256
 Run `./test-compose.sh` and `./test-runtime.sh` with OpenSSL installed. Each script generates a disposable wiki bearer token. Manual Compose runs use a synthetic fixture token by default. Only the wiki and its readers receive that application credential.
 
 Each path emits a JSON evidence line containing the fetched records in source order, transformed document IDs, document SHA-256, and wiki authentication results. Both paths compare every fetched field with the same fixture and the serialized documents with the same reference. The successful read and the two rejected reads use the same URL. The rejected reads must return HTTP 401 and the wiki's bearer challenge, for both an absent token and an incorrect token. The source fixture defines no document ACL fields. The existing network isolation probes run separately.
+
+## Milestone 3 • hosted Platforms
+
+[Enrollment and local Docker experiment](cloud/README.md). The live hosted proof and independent reproduction are pending.
