@@ -1,0 +1,19 @@
+services:
+  wiki:
+    build: .
+    command: ["python", "wiki.py"]
+    networks: [customer]
+    healthcheck:
+      test: ["CMD", "python", "-c", "from urllib.request import urlopen; urlopen('http://127.0.0.1:8080/pages', timeout=2).read()"]
+      interval: 2s
+      timeout: 3s
+      retries: 12
+  connector:
+    build: .
+    command: ["python", "connector.py", "http://wiki:8080"]
+    networks: [connector]
+networks:
+  customer:
+    internal: true
+  connector:
+    internal: true

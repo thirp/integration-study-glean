@@ -1,0 +1,3 @@
+services:
+  connector:
+    networks: [customer]
