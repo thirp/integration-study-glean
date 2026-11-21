@@ -1,7 +1,8 @@
 """Private wiki connector adapted from Glean's MIT-licensed wiki example."""
 import json
+import os
 import sys
-from urllib.request import ProxyHandler, build_opener
+from urllib.request import ProxyHandler, Request, build_opener
 
 from glean.indexing.connectors import BaseDataClient, BaseDatasourceConnector
 from glean.indexing.models import ContentDefinition, CustomDatasourceConfig, DocumentDefinition
@@ -13,7 +14,11 @@ class WikiDataClient(BaseDataClient[dict]):
 
     def get_source_data(self, **kwargs):
         # Every source read must use the connector's own network route.
-        with build_opener(ProxyHandler({})).open(self.base_url + "/pages", timeout=4) as response:
+        request = Request(self.base_url + "/pages")
+        token = os.environ.get("WIKI_TOKEN")
+        if token:
+            request.add_header("Authorization", f"Bearer {token}")
+        with build_opener(ProxyHandler({})).open(request, timeout=4) as response:
             return json.load(response)
 
 
@@ -33,12 +38,12 @@ class WikiConnector(BaseDatasourceConnector[dict]):
         ]
 
 
-def render(base_url):
-    connector = WikiConnector(name="studywiki", data_client=WikiDataClient(base_url))
-    documents = connector.transform(connector.get_data())
+def render_documents(documents):
     records = [doc.model_dump(by_alias=True, exclude_none=True, mode="json") for doc in documents]
     return json.dumps(records, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
 
 
 if __name__ == "__main__":
-    sys.stdout.buffer.write(render(sys.argv[1]).encode("utf-8"))
+    connector = WikiConnector(name="studywiki", data_client=WikiDataClient(sys.argv[1]))
+    documents = connector.transform(connector.get_data())
+    sys.stdout.buffer.write(render_documents(documents).encode("utf-8"))

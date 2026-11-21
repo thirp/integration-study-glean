@@ -23,6 +23,8 @@ services:
       - ${STUDY_KEYS:?}/caller:/run/thirp:ro
     command: [thirp-connect, --broker, 'broker:8443', --tls-ca, /run/thirp/broker.crt, --token-file, /run/thirp/token, --service, study/wiki, --listen, '127.0.0.1:18080']
   reader:
+    environment:
+      WIKI_TOKEN: ${WIKI_TOKEN:-synthetic-study-wiki-token}
     build: .
     network_mode: service:caller
     command: [python, connector.py, 'http://127.0.0.1:18080']

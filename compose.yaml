@@ -1,15 +1,19 @@
 services:
   wiki:
     build: .
+    environment:
+      WIKI_TOKEN: ${WIKI_TOKEN:-synthetic-study-wiki-token}
     command: ["python", "wiki.py"]
     networks: [customer]
     healthcheck:
-      test: ["CMD", "python", "-c", "from urllib.request import urlopen; urlopen('http://127.0.0.1:8080/pages', timeout=2).read()"]
+      test: ["CMD", "python", "-c", "import os; from urllib.request import Request, urlopen; urlopen(Request('http://127.0.0.1:8080/pages', headers={'Authorization': 'Bearer '+os.environ['WIKI_TOKEN']}), timeout=2).read()"]
       interval: 2s
       timeout: 3s
       retries: 12
   connector:
     build: .
+    environment:
+      WIKI_TOKEN: ${WIKI_TOKEN:-synthetic-study-wiki-token}
     command: ["python", "connector.py", "http://wiki:8080"]
     networks: [connector]
 networks:
