@@ -55,3 +55,9 @@ The second test starts the private wiki and a self-hosted TLS broker. A customer
 Compose creates the networks and starts the processes. The broker enforces its local production-mode policy from `runtime/broker.conf`, with separate per-run registration and connection credentials restricted to the named wiki. The reader has no customer-network attachment. The test reads through Runtime, probes direct DNS and IPv4 access from the same namespace, reads through Runtime again, and compares both results against the baseline. Generated credentials are removed during teardown.
 
 The Runtime image verifies the pinned Linux operator archive against its SHA-256 digest. See the [v0.16.11 release](https://github.com/thirp/runtime/releases/tag/v0.16.11) and [operator configuration](https://github.com/thirp/runtime/blob/v0.16.11/docs/OPERATIONS.md). Thirp Cloud for Platforms is a later experiment in managed authorization and broker operation.
+
+## Source records and wiki authentication
+
+Run `./test-compose.sh` and `./test-runtime.sh` with OpenSSL installed. Each script generates a disposable wiki bearer token. Manual Compose runs use a synthetic fixture token by default. Only the wiki and its readers receive that application credential.
+
+Each path emits a JSON evidence line containing the fetched records in source order, transformed document IDs, document SHA-256, and wiki authentication results. Both paths compare every fetched field with the same fixture and the serialized documents with the same reference. The successful read and the two rejected reads use the same URL. The rejected reads must return HTTP 401 and the wiki's bearer challenge, for both an absent token and an incorrect token. The source fixture defines no document ACL fields. The existing network isolation probes run separately.
