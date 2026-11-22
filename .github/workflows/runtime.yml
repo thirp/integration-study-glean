@@ -1,7 +1,7 @@
 name: Thirp Runtime wiki relay
 on:
   push:
-    branches: [dev/runtime-wiki-relay]
+    branches: [main]
   pull_request:
     branches: [main]
 permissions:

@@ -39,7 +39,7 @@ The connector adapts Glean's [non-streaming wiki example](https://github.com/gle
 
 The experiment ends at document serialization. Tenant uploads, identity and ACL synchronization, Thirp Runtime and Thirp Cloud for Platforms are outside this milestone. No tenant credentials are required.
 
-GitHub Actions runs `./test-compose.sh` on a Linux runner for pushes to `dev/private-wiki-baseline`. Open the **Private wiki baseline** run for the tested commit to inspect the observed DNS and IPv4 outcomes.
+GitHub Actions runs `./test-compose.sh` on a Linux runner for pushes to `main` and for pull requests. Open the **Private wiki baseline** run for the tested commit to inspect the observed DNS and IPv4 outcomes.
 
 ## Milestone 2 • self-hosted Thirp Runtime
 
@@ -66,4 +66,4 @@ Each path emits a JSON evidence line containing the fetched records in source or
 
 [Hosted Platforms runbook](cloud/README.md).
 
-Complete. On 2026-11-22, `./test-cloud.sh` passed twice in a row, each time from a fresh clean clone, against hosted Thirp Cloud for Platforms. The runs used the commit that `3e3f3989` replaced when this repository's history was rewritten to remove internal names. Its code and test files are byte-identical to that commit. The only difference is one status line in `STATE.md`. Both runs printed `PASS: hosted wiki documents, isolation, application authentication, credential controls and agent recovery`. The hosted documents matched `expected/documents.json` (SHA-256 `35474f96…8d56`). The wiki returned 401 for missing and invalid credentials. Direct wiki DNS and IPv4 access failed. An invalid caller, a stopped Agent and a revoked caller each received zero wiki bytes, and hosted reads resumed after the Agent restart. Both runs were made by the study operator on one host. A reproduction by a separate party has not been done.
+Complete. On 2026-11-22, `./test-cloud.sh` passed twice in a row, each time from a fresh clean clone, against hosted Thirp Cloud for Platforms. The runs used an earlier commit whose code and test files are byte-identical to `0ea3f810`. This repository's history was later rewritten to remove internal working files. Both runs printed `PASS: hosted wiki documents, isolation, application authentication, credential controls and agent recovery`. The hosted documents matched `expected/documents.json` (SHA-256 `35474f96…8d56`). The wiki returned 401 for missing and invalid credentials. Direct wiki DNS and IPv4 access failed. An invalid caller, a stopped Agent and a revoked caller each received zero wiki bytes, and hosted reads resumed after the Agent restart. Both runs were made by the study operator on one host. A reproduction by a separate party has not been done.

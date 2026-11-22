@@ -4,7 +4,7 @@ The Glean customer owns the Platforms account, Service, Agent and caller. The cu
 
 ## Set up once
 
-1. Create a fresh, dedicated Platforms account. Use a $0 signup if the console offers one for the study, or complete paid Checkout. [Platforms signup](https://thirp.net/cloud-for-platforms/)
+1. Create a fresh, dedicated Platforms account. [Platforms signup](https://thirp.net/cloud-for-platforms/)
 2. In the Platforms console, create a named Service such as `study-wiki`. In **Agents**, select that Service and enroll a new Linux x86-64 Agent to get its one-use token. If the form asks for a numeric target, enter `127.0.0.1:8080`. The study uses the token from the receipt and configures the real Docker target in the next step. Creating the Service and issuing the Agent enrollment token are console steps for owner CLI 0.1.5.
 3. Install the owner CLI 0.1.5 on the runner and sign in as the study account owner. The CLI commands below use the same arguments on Windows, macOS and Linux. Run `thirp login` for browser login or `thirp login --device` for headless login. Find the Service in the list and use its `service_id` value, for example `study-wiki`. [CLI 0.1.5 release](https://github.com/thirp/cloud/releases/tag/cli-0.1.5)
 
