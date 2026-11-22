@@ -6,11 +6,11 @@ These are the complete console outputs of two consecutive `./test-cloud.sh` runs
 - Redactions: none were needed. The script prints no tokens, enrollment or caller credentials, hostnames, IP addresses, usernames or home paths, so both logs are reproduced unchanged.
 - Raw logs: [run 1](hosted-run1-2026-11-22.log) and [run 2](hosted-run2-2026-11-22.log).
 
-The two runs differ only in their start time and in the established-stream line. That line reports how much the live stream carried before revocation closed it, which varies from run to run.
+The two runs differ only in their printed timestamp and in the established-stream line. That line reports how much the live stream carried before revocation closed it, which varies from run to run.
 
 | | Run 1 | Run 2 |
 | --- | --- | --- |
-| Started (UTC) | 2026-11-22T19:41:43Z | 2026-11-22T19:43:23Z |
+| Timestamp (UTC) | 2026-11-22T19:41:43Z | 2026-11-22T19:43:23Z |
 | `documents.json` SHA-256 | `35474f96…8d56` | `35474f96…8d56` |
 | Wiki auth (missing / invalid) | 401 / 401 | 401 / 401 |
 | Direct wiki DNS and IPv4 | failed | failed |
