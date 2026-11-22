@@ -2,6 +2,10 @@ x-runtime: &runtime
   image: glean-cloud-runtime:0.16.11
   platform: linux/amd64
   build: ./runtime
+  # The image has OpenSSL but no /usr/lib/ssl, so the default CA paths are empty.
+  # Point OpenSSL at the mounted system CA bundle.
+  environment:
+    SSL_CERT_FILE: /etc/ssl/certs/ca-certificates.crt
 services:
   wiki:
     build: .
