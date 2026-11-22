@@ -15,5 +15,7 @@ with build_opener(ProxyHandler({})).open(req, timeout=5) as stream:
             count += 1
     except ConnectionResetError:
         pass
+    if not Path("/tmp/revocation-started").exists():
+        raise SystemExit("Active stream closed before revocation started")
     print(f"Established stream closed after {count} wiki bytes and {time.monotonic()-started:.2f}s from first byte")
     Path("/tmp/stream-ended").touch()

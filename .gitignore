@@ -1,2 +1,8 @@
 __pycache__/
 .venv/
+agent-enrollment/
+caller-enrollment/
+*.token
+caller.conf
+agent.conf
+/cloud-run.log

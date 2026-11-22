@@ -54,7 +54,7 @@ The second test starts the private wiki and a self-hosted TLS broker. A customer
 
 Compose creates the networks and starts the processes. The broker enforces its local production-mode policy from `runtime/broker.conf`, with separate per-run registration and connection credentials restricted to the named wiki. The reader has no customer-network attachment. The test reads through Runtime, probes direct DNS and IPv4 access from the same namespace, reads through Runtime again, and compares both results against the baseline. Generated credentials are removed during teardown.
 
-The Runtime image verifies the pinned Linux operator archive against its SHA-256 digest. See the [v0.16.11 release](https://github.com/thirp/runtime/releases/tag/v0.16.11) and [operator configuration](https://github.com/thirp/runtime/blob/v0.16.11/docs/OPERATIONS.md). Thirp Cloud for Platforms is a later experiment in managed authorization and broker operation.
+The Runtime image verifies the pinned Linux operator archive against its SHA-256 digest. See the [v0.16.11 release](https://github.com/thirp/runtime/releases/tag/v0.16.11) and [operator configuration](https://github.com/thirp/runtime/blob/v0.16.11/docs/OPERATIONS.md).
 
 ## Source records and wiki authentication
 
@@ -64,4 +64,4 @@ Each path emits a JSON evidence line containing the fetched records in source or
 
 ## Milestone 3 • hosted Platforms
 
-[Enrollment and local Docker experiment](cloud/README.md). The live hosted proof and independent reproduction are pending.
+[Hosted Platforms runbook](cloud/README.md). The live hosted proof and independent reproduction are pending.
