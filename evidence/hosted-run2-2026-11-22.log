@@ -1,0 +1,14 @@
+Building and starting the hosted study containers
+Active wiki response confirmed. Revoking the disposable caller.
+git rev-parse HEAD 73dc83ac093533fc2133f40fe7c7a8fc9c4c2e12
+git status --porcelain=v1 --untracked-files=all clean
+UTC 2026-11-22T19:43:23Z
+35474f96f50f1797c16105fd90cad6e1fac4e67805e629666558a41b64ab8d56  expected/documents.json
+35474f96f50f1797c16105fd90cad6e1fac4e67805e629666558a41b64ab8d56  hosted/documents.json
+{"document_ids": ["cafe", "rotation"], "documents_sha256": "35474f96f50f1797c16105fd90cad6e1fac4e67805e629666558a41b64ab8d56", "records": [{"content": "Week A: platform.\nWeek B: operations.", "heading": "On-call rotation", "slug": "rotation"}, {"content": "Kitchen hours: 08:00–16:00.", "heading": "Café handbook", "slug": "cafe"}], "wiki_auth": {"invalid": 401, "missing": 401, "valid": "accepted"}}
+Direct wiki DNS lookup and IPv4 access failed
+Invalid caller credential returned zero wiki bytes
+Stopped Agent returned zero wiki bytes. Hosted reads recovered after restart.
+Revoked caller returned zero wiki bytes on fresh reads. Local wiki still matched the baseline.
+Established stream closed after 44 wiki bytes and 10.99s from first byte
+PASS: hosted wiki documents, isolation, application authentication, credential controls and agent recovery
