@@ -12,6 +12,7 @@ try:
         if conn.recv(1):
             raise SystemExit("Unexpected response bytes from the source")
         outcome = "EOF"
-except (ConnectionRefusedError, ConnectionResetError, BrokenPipeError) as exc:
+# A caller holding the socket open without sending anything also returns zero bytes.
+except (ConnectionRefusedError, ConnectionResetError, BrokenPipeError, TimeoutError) as exc:
     outcome = type(exc).__name__
 print(f"Zero response bytes: {outcome} after {time.monotonic() - started:.2f}s")
