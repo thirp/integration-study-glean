@@ -1,0 +1,43 @@
+x-runtime: &runtime
+  image: glean-cloud-runtime:0.16.11
+  platform: linux/amd64
+  build: ./runtime
+  # The image has OpenSSL but no /usr/lib/ssl, so the default CA paths are empty.
+  # Point OpenSSL at the mounted system CA bundle.
+  environment:
+    SSL_CERT_FILE: /etc/ssl/certs/ca-certificates.crt
+services:
+  wiki:
+    build: .
+    networks: [customer]
+    volumes:
+      - ${CLOUD_TMP:?}/wiki.token:/run/wiki.token:ro
+      - ./cloud/stream_wiki.py:/study/stream_wiki.py:ro
+    command: [sh, -ec, 'export WIKI_TOKEN="$$(cat /run/wiki.token)"; exec python stream_wiki.py']
+  agent:
+    <<: *runtime
+    networks: [customer, agent_out]
+    volumes:
+      - ${CLOUD_TMP:?}/agent:/run/thirp:ro
+      - ${CLOUD_SYSTEM_CA:?}:/etc/ssl/certs/ca-certificates.crt:ro
+    command: [thirp-agent, --config, /run/thirp/agent.conf]
+  reader:
+    build: .
+    networks: [caller_out]
+    volumes:
+      - ${CLOUD_TMP:?}/wiki.token:/run/wiki.token:ro
+      - ./cloud/watch.py:/study/watch.py:ro
+      - ./cloud/check.py:/study/cloud_check.py:ro
+    command: [sleep, infinity]
+  caller:
+    <<: *runtime
+    network_mode: service:reader
+    volumes:
+      - ${CLOUD_TMP:?}/caller:/run/thirp:ro
+      - ${CLOUD_SYSTEM_CA:?}:/etc/ssl/certs/ca-certificates.crt:ro
+    command: [thirp-connect, --caller-conf, /run/thirp/caller.conf]
+networks:
+  customer:
+    internal: true
+  agent_out: {}
+  caller_out: {}
